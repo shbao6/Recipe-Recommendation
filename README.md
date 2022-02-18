@@ -2,7 +2,7 @@
 There is a similarity-based recipe recommendation. 
 In this project, I build recommender systems to make predictions related to user/recipe interactions from Food.com.
 
-My first step was to solve for imbalanced data issue. The validation set only consists of positive samples but I also need examples of user/item pairs corresponding to recipes that weren't cooked. I sample a negative entry by randomly choosing a recipe that user hasn't cooked. The validation set then has 200,000 pairs of user and recipe, with cooked and non-cooked split evenly.
+My first step is to solve for imbalanced data issue. The validation set only consists of positive samples but I also need examples of user/item pairs corresponding to recipes that weren't cooked. I sample a negative entry by randomly choosing a recipe that user hasn't cooked. The validation set then has 200,000 pairs of user and recipe, with cooked and non-cooked split evenly.
 
 About Data Features and models
 
