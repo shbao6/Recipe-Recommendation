@@ -16,11 +16,11 @@ The similarity is used to describe the connection between items and users. I hav
 
 1.3 Optimized Model
 
-To improve the predictor, I incorporated the Jaccard-based threshold and the popularity-based threshold. I converted the popularity into percentile numbers and stacked it with the similarity matrix to obtain a large feature matrix. Then applied logistic regression to train the model and used the model to predict test data.
+To improve the predictor, I incorporate the Jaccard-based threshold and the popularity-based threshold. I convert the popularity into percentile numbers and stack it with the similarity matrix to obtain a large feature matrix. Then apply logistic regression to train the model and use the model to predict test data.
 
 2.1 Rating Prediction
 
-I used the Simple bias only latent factor-based recommender. I found this approach works better than Factorization Machine (fastFM) and works equally good as the latent factor model (surprise). The package I used is scipy.optimize.
+I use the Simple Bias Latent Factor-based recommender. I find this approach works better than Factorization Machine (fastFM) and works equally good as the latent factor model (surprise). The package I used is scipy.optimize.
 
 2.2 Utility Structure
 
@@ -28,12 +28,9 @@ I build some utility data structures to store the variables of our model (alpha,
 
 2.3 Optimize Cost Function
 
-To perform gradient descent, the library I used requires passing it a "flat" parameter vector (theta) containing all parameters. I defined a utility function which converts between a flat feature vector and my model parameters, i.e., it "unpacks" theta into the offset and bias parameters.
-The "cost" function is the function I’m trying to optimize. This is a requirement of the gradient descent library. In this case, I computed the (regularized) MSE of a particular solution (theta) and returning the cost.
-Then I can run the gradient descent. The inputs were: the cost function; initial parameter values; derivative function defined; the ratings in the training set and the regularization strength lambda. The model will determine the best values of the parameters when stopping at the smallest MSE value.
+The "cost" function is the function I’m trying to optimize. I compute the (regularized) MSE of a particular solution (theta) and returning the cost.
+The inputs are: the cost function; initial parameter values; derivative function defined; the ratings in the training set and the regularization strength lambda. The model will determine the best values of the parameters when stopping at the smallest MSE value.
 
 2.4 Prediction Function
 
-I defined the prediction function as alpha + userBiases[user] + itemBiases[item]. Alpha was the average rating in the training data. Then I applied the prediction function on the validation set and got MSEs with different lambdas. The best lambda with the smallest MSE was 0.00001.
-With the best lambda = 0.00001 in mind, I trained the model on the entire dataset with 500,000 reviews to get the new parameters. Alpha became the average rating in the entire dataset.
-Finally, I obtained the predictions for testing data using the prediction function with new parameters. For each pair of (user, recipe), if the recipe is new, it will return Alpha + userBiases; if the user is new, it will return Alpha + itemBiases; if they are all new, it will return Alpha only. For the rest (user, recipe) pairs, it will return Alpha + userbiases + itemBiases.
+The prediction function is defined as alpha + userBiases[user] + itemBiases[item]. Alpha is the average rating in the training data. I apply the prediction function on the validation set and get the best lambda to train the model on the entire dataset with 500,000 reviews. For each pair of (user, recipe), if the recipe is new, it will return Alpha + userBiases; if the user is new, it will return Alpha + itemBiases; if they are all new, it will return Alpha only. For the rest (user, recipe) pairs, it will return Alpha + userbiases + itemBiases.
